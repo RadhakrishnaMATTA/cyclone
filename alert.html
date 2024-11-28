@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood Alert Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://as2.ftcdn.net/v2/jpg/06/23/70/15/1000_F_623701535_pPIHVAj2gMQqVXweGrc7d7ce2qtflPRx.jpg'); /* Replace with the image URL */
+            background-size: cover; /* Ensures the image covers the entire page */
+            background-position: down; /* Keeps the image centered */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+        }
+
+        .chat-container {
+            display: none; /* Hidden by default */
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            border: 2px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .chat-box {
+            height: 300px;
+            width: 100%;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+        }
+        .user-message {
+            background-color: #a1c4fd;
+            text-align: right;
+        }
+        .alert-button {
+            padding: 10px 15px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 20px;
+        }
+        .alert-button:hover {
+            background-color: #0b7dda;
+
+            padding: 10px 15px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 20px;
+}
+        }
+        .input-message {
+            width: 80%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .send-button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .send-button:hover {
+            background-color: #45a049;
+        }
+        .location-button {
+            padding: 10px;
+            background-color: #FF5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .location-button:hover {
+            background-color: #e64a19;
+        }
+        .dropdown {
+            display: none;
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 100%;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .success-message {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Audio for alert sound -->
+    <audio id="alert-sound" src="rav.mp3" preload="auto"></audio>
+    <button class="alert-button" onclick="toggleChat()">Flood Alert</button>
+    <button class="alert-button" onclick="window.location.href='index1.html';">Go Back Home</button>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chat-container">
+        <div class="chat-box" id="chat-box">
+            <!-- Messages will appear here -->
+        </div>
+
+        <!-- Location Button to Show Dropdown -->
+        <button class="location-button" onclick="toggleLocationDropdown()">Select Location</button>
+
+        <!-- Dropdown for Countries -->
+        <select id="country-dropdown" class="dropdown" onchange="loadStates()">
+            <option value="">-- Select Country --</option>
+            <option value="India">India</option>
+            <option value="USA">USA</option>
+            <option value="Canada">Canada</option>
+            <option value="Japan">Japan</option>
+            <!-- Add more countries as needed -->
+        </select>
+
+        <!-- Dropdown for States (Only visible when India is selected) -->
+        <select id="state-dropdown" class="dropdown" onchange="loadCities()" style="display: none;">
+            <option value="">-- Select State --</option>
+            <!-- States will be populated dynamically when India is selected -->
+        </select>
+
+        <!-- Dropdown for Cities (Only visible when a state is selected) -->
+        <select id="city-dropdown" class="dropdown" style="display: none;">
+            <option value="">-- Select City --</option>
+            <!-- Cities will be populated dynamically when a state is selected -->
+        </select>
+
+        <!-- User Input -->
+        <input type="text" id="message-input" class="input-message" placeholder="Type your message here..." />
+        <button class="send-button" onclick="sendMessage()">Send</button>
+        
+        <div id="success-msg" class="success-message" style="display:none;">Messages Sent Successfully!</div>
+    </div>
+
+    <script>
+        // Toggle chat visibility
+        function toggleChat() {
+            const chatContainer = document.getElementById('chat-container');
+            if (chatContainer.style.display === "none" || chatContainer.style.display === "") {
+                chatContainer.style.display = "block";
+            } else {
+                chatContainer.style.display = "none";
+            }
+        }
+
+        // Toggle location dropdown visibility
+        function toggleLocationDropdown() {
+            const dropdown = document.getElementById('country-dropdown');
+            if (dropdown.style.display === "none" || dropdown.style.display === "") {
+                dropdown.style.display = "block";
+            } else {
+                dropdown.style.display = "none";
+            }
+        }
+
+        // Load States when India is selected
+        function loadStates() {
+            const countryDropdown = document.getElementById('country-dropdown');
+            const stateDropdown = document.getElementById('state-dropdown');
+
+            if (countryDropdown.value === 'India') {
+                const states = [
+                    { name: "Andhra Pradesh" },
+                    { name: "Bihar" },
+                    { name: "Tamil Nadu" },
+                    { name: "Karnataka" },
+                    { name: "Arunachala Pradesh" },
+                ];
+
+                // Clear existing options
+                stateDropdown.innerHTML = '<option value="">-- Select State --</option>';
+
+                // Add states to the dropdown
+                states.forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state.name;
+                    option.textContent = state.name;
+                    stateDropdown.appendChild(option);
+                });
+
+                // Display the state dropdown
+                stateDropdown.style.display = "block";
+            } else {
+                stateDropdown.style.display = "none";
+            }
+        }
+
+        // Load Cities when a state is selected
+        function loadCities() {
+            const stateDropdown = document.getElementById('state-dropdown');
+            const cityDropdown = document.getElementById('city-dropdown');
+
+            if (stateDropdown.value === 'Andhra Pradesh') {
+                const cities = [
+                    { name: "Amaravati" },
+                    { name: "Bapatla" },
+                    { name: "Nellorepeta" },
+                    { name: "Machilipatnam" },
+                    { name: "Vemulapalli" },
+                    { name: "Singarayakonda" },
+                    { name: "Pedaganjam" },
+                    { name: "Maddirala" },
+                ];
+
+                // Clear existing options
+                cityDropdown.innerHTML = '<option value="">-- Select City --</option>';
+
+                // Add cities to the dropdown
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city.name;
+                    option.textContent = city.name;
+                    cityDropdown.appendChild(option);
+                });
+
+                // Display the city dropdown
+                cityDropdown.style.display = "block";
+            } else {
+                cityDropdown.style.display = "none";
+            }
+        }
+
+        // Reset selections to allow re-selection of country
+        function resetSelections() {
+            const countryDropdown = document.getElementById('country-dropdown');
+            const stateDropdown = document.getElementById('state-dropdown');
+            const cityDropdown = document.getElementById('city-dropdown');
+            const messageInput = document.getElementById('message-input');
+
+            // Reset dropdowns
+            countryDropdown.value = '';
+            stateDropdown.style.display = "none";
+            cityDropdown.style.display = "none";
+            messageInput.value = '';
+        }
+
+        // Send a large number of messages after user selects city and inputs a message
+        function sendMessage() {
+    const messageInput = document.getElementById('message-input');
+    const countryDropdown = document.getElementById('country-dropdown');
+    const stateDropdown = document.getElementById('state-dropdown');
+    const cityDropdown = document.getElementById('city-dropdown');
+    const chatBox = document.getElementById('chat-box');
+    const alertSound = document.getElementById('alert-sound');
+
+    const country = countryDropdown.value;
+    const state = stateDropdown.value;
+    const city = cityDropdown.value;
+    const message = messageInput.value;
+
+    // Allow message to be sent if there is any input message
+    if (message) {
+        // Send multiple messages (adjust the number if needed)
+        const numMessages = 500;
+        for (let i = 0; i < numMessages; i++) {
+            const newMessage = document.createElement('div');
+            newMessage.classList.add('message', 'user-message');
+            newMessage.textContent = `Alert! ${message}`; // Message will be sent with or without country/state/city
+            chatBox.appendChild(newMessage);
+
+            // Play the alert sound
+            alertSound.play();
+        }
+
+        // Show success message and reset
+        document.getElementById('success-msg').style.display = "block";
+        setTimeout(function () {
+            document.getElementById('success-msg').style.display = "none";
+            resetSelections(); // Reset the form for new input
+        }, 2000);
+    } else {
+        alert("Please enter a message before sending.");
+    }
+}
+
+    </script>
+
+</body>
+</html>

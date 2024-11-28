@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyclone Prediction & Precautions</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            overflow-x: hidden;
+            background-color: #f4f4f4;
+        }
+
+        /* Header Section */
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffcc00;
+            text-decoration: underline;
+        }
+
+        /* Hero Section with Cyclone and Tsunami Background */
+        .hero {
+            background: url('https://t3.ftcdn.net/jpg/03/12/46/12/360_F_312461263_V2rJQP41l9joLXTgjMYVDv09Rcn0zRDL.jpg') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+            animation: fadeIn 1s ease-in-out;
+            position: relative;
+        }
+
+        /* Map Overlay for Danger Zones */
+        .map-overlay {
+            background: url('https://via.placeholder.com/800x400?text=Tsunami+Map') no-repeat center center/contain;
+            opacity: 0.1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-content h2 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 20px;
+            animation: fadeInUp 1.5s ease;
+            z-index: 1;
+            position: relative;
+        }
+
+        .cta-button {
+            background-color: #ff8800;
+            color: white;
+            padding: 12px 30px;
+            font-size: 18px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+            z-index: 1;
+            position: relative;
+        }
+
+        .cta-button:hover {
+            background-color: #cc6b00;
+            transform: scale(1.05);
+        }
+
+        /* 7 Days Forecast Section */
+        .forecast-container {
+            background-color: #282828;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            color: #fff;
+        }
+
+        .forecast-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .forecast-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .day {
+            text-align: center;
+            width: 150px;
+            margin: 10px;
+        }
+
+        .temp {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .date {
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* Precaution Table Section */
+        .precautions {
+            padding: 40px 20px;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        .precautions h2 {
+            font-size: 32px;
+            color: #0044cc;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #003366;
+            color: white;
+            font-size: 18px;
+        }
+
+        td {
+            background-color: #fff;
+            font-size: 16px;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover td {
+            background-color: #e0e0e0;
+        }
+
+        /* Contact Section */
+        .contact {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            background-color: #f4f4f4;
+            gap: 40px;
+        }
+
+        .contact h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #0044cc;
+            animation: fadeInDown 1.5s ease;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        /* Sidebar Buttons */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+            width: 200px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            background-color: #0044cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #0033a0;
+        }
+
+        .contact-form {
+            max-width: 500px;
+            text-align: center;
+            display: inline-block;
+            flex-grow: 1;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border 0.3s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border: 1px solid #0044cc;
+        }
+
+        .contact-form button {
+            background-color: #0044cc;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .contact-form button:hover {
+            background-color: #0033a0;
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Media Query for Responsive Design */
+        @media (max-width: 768px) {
+            .forecast-details {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .day {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <h1>Cyclone Prediction & Precautions</h1>
+            <nav>
+                <ul>
+                    <li><a href="humidity1.html">Humidity</a></li>
+                    <li><a href="rainfall1.html">Rainfall</a></li>
+                    <li><a href="windpressure.html">Windpressure</a></li>
+                    <li><a href="waterlevel.html">Waterlevel</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="map-overlay"></div> <!-- Map overlay for high-risk zones -->
+        <div class="hero-content">
+            <h2>Stay Alert, Stay Safe</h2>
+            <p>Real-time monitoring and early warning for potential flood hazards. Your safety is our priority.</p>
+            <a href="g.html" class="cta-button">Get Safety Tips</a>
+            <a href="a.html" class="cta-button">Awareness</a>
+
+        </div>
+
+    </section>
+    <!-- 7 Days Forecast Section -->
+    <div class="forecast-container">
+        <div class="forecast-title">7 Days Forecast</div>
+        <div class="forecast-details">
+            <div class="day">
+                <div class="temp">☀️ +29°/+18</div>
+                <div class="date">29 NOV<br>FRIDAY</div>
+            </div>
+            <div class="day">
+                <div class="temp">🌧️ +21°/+16</div>
+                <div class="date">30 NOV<br>SATURDAY</div>
+            </div>
+            <div class="day">
+                <div class="temp">🌦️ +24°/+20</div>
+                <div class="date">1 DEC<br>SUNDAY</div>
+            </div>
+            <div class="day">
+                <div class="temp">⛈️ +30°/+17</div>
+                <div class="date">2 DEC<br>MONDAY</div>
+            </div>
+            <div class="day">
+                <div class="temp">🌦️ ⛈️ +23°/+10</div>
+                <div class="date">3 DEC<br>TUESDAY</div>
+            </div>
+            <div class="day">
+                <div class="temp">☀️⛈️ 23°</div>
+                <div class="date">Tomorrow</div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact Section -->
+    <section class="contact">
+        <div class="contact-form">
+            <h2>Contact Us</h2>
+            <form>
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Message" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+        <style>
+    /* Contact Section */
+    .contact {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+        background-image: url('data:image/jpeg;base64,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'); /* Replace with your Tsunami image URL */
+        background-size: cover; /* Ensures the image covers the entire section */
+        background-position: center; /* Centers the image */
+        background-attachment: fixed; /* Keeps the image fixed when scrolling */
+        gap: 40px;
+        color: white; /* Ensures the text is visible on the background */
+    }
+
+    /* Optional: Add an overlay to darken the background for better readability */
+    .contact::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4); /* Dark overlay with 40% opacity */
+        z-index: -1; /* Ensures overlay stays behind the content */
+    }
+
+    .contact-form {
+        max-width: 500px;
+        text-align: center;
+        display: inline-block;
+        flex-grow: 1;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        transition: border 0.3s;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+        border: 1px solid #0044cc;
+    }
+
+    .contact-form button {
+        background-color: #0044cc;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .contact-form button:hover {
+        background-color: #0033a0;
+        transform: scale(1.05);
+    }
+</style>
+
+        <div class="sidebar">
+            <a href="s.html">Interactive Map</a>
+            <a href="r.html">Real-Time Data</a>
+            <a href="safity1.html">Safety Resources</a>
+             <a href="livechat.html">Live Chart</a>
+
+        </div>
+    </section>
+    </section>
+    <!-- Precaution Table Section -->
+<section class="precautions">
+    <h2>Precautionary Measures</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Precaution</th>
+                <th>Description</th>
+                <th>Alert System</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Stay Informed</td>
+                <td>Listen to weather updates and flood warnings from local authorities.</td>
+                <td rowspan="6" class="alert-section-container">
+                    <h2>Cyclone, Flood Alerts Section</h2>
+                    <h3 style="text-align: center;">Choose the Alert Type</h3>
+                    <!-- Buttons for Alerts -->
+                    <div style="text-align: center;">
+                        <!-- Button for Flood Alert -->
+                        <button onclick="window.location.href='alert.html';" style="padding: 10px 20px; background-color: #d9534f; font-size: 16px; cursor: pointer;">Flood Alert</button>
+
+                        <!-- Button for Cyclone Alert -->
+                        <button onclick="window.location.href='cyclone.html';" style="padding: 10px 20px; background-color: #d9534f; font-size: 16px; cursor: pointer;">Cyclone Alert</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Move to Higher Ground</td>
+                <td>Ensure you are not in a flood-prone area. Relocate to higher ground.</td>
+            </tr>
+            <tr>
+                <td>Avoid Flooded Roads</td>
+                <td>Never drive or walk through flooded streets. Water can hide dangers.</td>
+            </tr>
+            <tr>
+                <td>Prepare an Emergency Kit</td>
+                <td>Pack necessary supplies such as food, water, and a first aid kit.</td>
+            </tr>
+            <tr>
+                <td>Stay Indoors</td>
+                <td>During flooding, remain indoors. Do not use electrical appliances in wet conditions.</td>
+            </tr>
+            <tr>
+                <td>Stay Safe During Evacuations</td>
+                <td>If required to evacuate, do so safely and follow instructions from authorities.</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>22481A05H2, 22481A05E4, 22481A05D3, 22481A05E9.</p>
+</footer>
+
+<style>
+    /* Style for the section container */
+    .alert-section-container {
+        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvS5RCYxHM0qofLX3ie9BYwh8K3uGEw1V7RA&s'); /* Replace with your image URL */
+        background-size: cover; /* Ensure the image covers the entire container */
+        background-position: center; /* Center the image */
+        color: white; /* Text color */
+        padding: 20px; /* Add padding inside the alert container */
+        text-align: center; /* Center the text inside */
+    }
+
+    /* Additional styling for the h2 and h3 inside the container */
+    .alert-section-container h2 {
+        font-size: 30px; /* Adjust font size as needed */
+        margin-bottom: 20px;
+    }
+
+    .alert-section-container h3 {
+        font-size: 22px; /* Adjust font size for the sub-heading */
+        margin-bottom: 30px;
+    }
+</style>
+</body>
+</html>

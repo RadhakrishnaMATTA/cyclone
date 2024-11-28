@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Flood Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #003366;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th, .data-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .data-table th {
+            background-color: #003366;
+            color: white;
+        }
+
+        .data-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .button {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .button:hover {
+            background-color: #218838;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Real-Time Flood Data</h1>
+
+        <p>Access live updates on flood conditions, including water levels, rainfall, and evacuation alerts. Stay informed and prepared by monitoring real-time data from trusted sources.</p>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Data Type</th>
+                    <th>Description</th>
+                    <th>Access Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Live Water Levels</td>
+                    <td>Check current water levels in your area and monitor any significant changes.</td>
+                    <td><a href="https://waterdata.usgs.gov/nwis/rt" class="button" target="_blank">View Water Levels</a></td>
+                </tr>
+                <tr>
+                    <td>Rainfall Data</td>
+                    <td>See real-time rainfall data to understand potential flood risk due to heavy rains.</td>
+                    <td><a href="https://www.weather.gov/" class="button" target="_blank">Check Rainfall Data</a></td>
+                </tr>
+                <tr>
+                    <td>Evacuation Alerts</td>
+                    <td>Find out about active evacuation alerts and zones in flood-prone areas.</td>
+                    <td><a href="https://www.ready.gov/alerts" class="button" target="_blank">Evacuation Alerts</a></td>
+                </tr>
+                <tr>
+                    <td>Weather Forecast</td>
+                    <td>Get a detailed weather forecast for the next 7 days to prepare for potential flooding events.</td>
+                    <td><a href="https://www.noaa.gov/" class="button" target="_blank">Weather Forecast</a></td>
+                </tr>
+                <tr>
+                    <td>River & Stream Gauges</td>
+                    <td>Monitor rivers and streams for any rising water levels indicating potential flood threats.</td>
+                    <td><a href="https://www.rivergages.com/" class="button" target="_blank">River Gauges</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

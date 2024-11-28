@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood,Cyclone Detection System - Humidity</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Navigation and Header */
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #ffcc00;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(to right, rgba(0, 68, 204, 0.9), rgba(0, 153, 255, 0.9)), url('https://via.placeholder.com/1200x600') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .hero-content h2 {
+            font-size: 48px;
+        }
+
+        /* Humidity Information Section */
+        .humidity-info {
+            padding: 60px 20px;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+
+        .humidity-info h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .humidity-info p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .humidity-graph {
+            margin: 40px 0;
+            width: 40%; /* Reduced width of the graph */
+            height: 300px; /* Reduced height of the graph */
+            display: inline-block; /* Aligns the graph to the left */
+        }
+
+        .predictions {
+            display: inline-block; /* Aligns predictions to the right */
+            vertical-align: top; /* Aligns with the graph */
+            width: 50%; /* Width for the prediction section */
+            padding-left: 20px; /* Space between graph and predictions */
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        /* Input Section */
+        .input-section {
+            margin-top: 30px;
+            text-align: center; /* Center the label and input */
+        }
+
+        .input-section label {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            width: 150px; /* Adjust input width */
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #003366;
+            color: white;
+            border: none;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Cyclone Detection System - Humidity</h1>
+        <nav>
+            <ul>
+                <li><a href="index1.html">Home</a></li>
+                <li><a href="#">Humidity</a></li>
+                <li><a href="rainfall1.html">Rainfall</a></li>
+                <li><a href="windpressure.html">Windpressure</a></li>
+                <li><a href="#">Waterlevel</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero ">
+        <div class="hero-content">
+            <h2>Monitor Humidity Levels for Cyclone Risk</h2>
+            <p>Real-time humidity data to help assess Cyclone risks. Stay informed and prepared.</p>
+        </div>
+    </section>
+
+    <!-- Humidity Information Section -->
+    <section class="humidity-info">
+        <h2>Current Humidity Levels</h2>
+        <p>Humidity plays a key role in Cyclone prediction. The higher the humidity, the more likely heavy rainfall could occur.</p>
+        
+        <div class="humidity-graph">
+            <canvas id="humidityChart"></canvas>
+        </div>
+
+        <div class="predictions">
+            <h3>Predicted Humidity Levels</h3>
+            <p id="predictionTomorrow"></p>
+            <p id="predictionDayAfter"></p>
+        </div>
+
+        <p>Humidity is a critical factor to monitor during heavy rainfall. Our system tracks this data in real-time to provide you with immediate alerts and Cyclone predictions.</p>
+    </section>
+
+    <!-- Input Section for User Input -->
+    <section class="input-section">
+        <label for="humidityInput">Enter Humidity Level (%):</label>
+        <input type="number" id="humidityInput" min="0" max="100" placeholder="Enter humidity" />
+        <button onclick="checkHumidity()">Check</button>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Flood,Cyclone Detection System. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Create a Chart.js instance for live monitoring
+        const ctx = document.getElementById('humidityChart').getContext('2d');
+        const data = {
+            labels: [], // Empty labels for now
+            datasets: [{
+                label: 'Humidity (%)',
+                data: [], // Empty data array for now
+                borderColor: 'rgba(0, 123, 255, 1)',
+                backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                fill: true,
+                tension: 0.4
+            }]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.raw + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom',
+                        ticks: {
+                            maxTicksLimit: 5,
+                            callback: function(value, index, values) {
+                                return new Date(value).toLocaleTimeString(); // Convert to time format
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Time',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    y: {
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            stepSize: 10
+                        },
+                        title: {
+                            display: true,
+                            text: 'Humidity (%)',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const humidityChart = new Chart(ctx, config);
+
+        // Function to simulate live humidity data
+        function updateHumidityData() {
+            const timeNow = new Date().getTime();
+            const humidityLevel = Math.random() * 100; // Simulating humidity between 0 and 100%
+
+            // Add new data point
+            if (data.labels.length >= 20) {
+                data.labels.shift();
+                data.datasets[0].data.shift();
+            }
+
+            data.labels.push(timeNow);
+            data.datasets[0].data.push(humidityLevel);
+
+            humidityChart.update();
+        }
+
+        // Update the chart every 2 seconds to simulate live data
+        setInterval(updateHumidityData, 2000);
+
+        // Check the humidity entered by the user and predict future values
+        function checkHumidity() {
+            const humidity = document.getElementById('humidityInput').value;
+            if (humidity > 75) {
+                alert('Heavy humidity detected!');
+            } else {
+                alert('Humidity is normal.');
+            }
+
+            // Predict humidity for tomorrow and the day after tomorrow
+            const tomorrowHumidity = (humidity * 1.1).toFixed(2); // 10% increase
+            const dayAfterHumidity = (humidity * 1.2).toFixed(2); // 20% increase
+
+            document.getElementById ('predictionTomorrow').innerHTML = `Tomorrow's Humidity: ${tomorrowHumidity}% 🌧️`;
+            document.getElementById('predictionDayAfter').innerHTML = `Day After Tomorrow's Humidity: ${dayAfterHumidity}% ☔`;
+        }
+    </script>
+
+</body>
+</html>

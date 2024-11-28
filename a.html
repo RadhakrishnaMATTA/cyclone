@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyclone Prediction and Precautions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: blue;
+            color: white;
+            padding: 20px;
+            font-size: 24px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .info-container,
+        .videos-container {
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #ffffff;
+            text-align: left;
+        }
+        .videos-container {
+            display: none;
+        }
+        iframe {
+            width: 100%;
+            max-width: 560px;
+            height: 315px;
+            margin: 20px auto;
+            display: block;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    Cyclone Prediction and Precautions
+</header>
+
+<!-- Button to toggle cyclone information -->
+<button onclick="showInfo()">Learn About Cyclones</button>
+
+<!-- Buttons to play videos -->
+<button onclick="showVideoPlayer(0)">How Cyclones forms</button>
+<button onclick="showVideoPlayer(1)">Cyclones Safity Tips</button>
+<button onclick="showVideoPlayer(2)">Precautions</button>
+
+<!-- Information about cyclones -->
+<div id="info-container" class="info-container" style="display: none;">
+    <h2>What is a Cyclone?</h2>
+    <p>
+        A cyclone is a large-scale air mass that rotates around a strong center of low atmospheric pressure. 
+        Cyclones are caused by warm ocean waters, high humidity in the atmosphere, and converging winds.
+    </p>
+    <h3>How Cyclones Form</h3>
+    <ul>
+        <li>Warm ocean water heats the air above it, causing it to rise.</li>
+        <li>This rising air creates a low-pressure area near the ocean surface.</li>
+        <li>As more warm air rises, surrounding air moves in to replace it, creating strong winds.</li>
+        <li>When these winds begin to rotate, a cyclone forms.</li>
+    </ul>
+</div>
+
+<!-- Video container -->
+<div id="videos-container" class="videos-container">
+    <h3>Watch Videos to Learn More</h3>
+    <div id="video-player">
+        <!-- Video iframe will be added dynamically -->
+    </div>
+</div>
+
+<script>
+    // Array of video URLs
+    const videoUrls = [
+        "https://www.youtube.com/embed/FxF8fPdtGao",
+        "https://www.youtube.com/embed/aEkAzbM4_HU",
+        "https://www.youtube.com/embed/XbdZ76684es"
+    ];
+
+    function showInfo() {
+        const infoContainer = document.getElementById('info-container');
+        infoContainer.style.display = (infoContainer.style.display === 'none' || infoContainer.style.display === '') 
+            ? 'block' 
+            : 'none';
+    }
+
+    function showVideoPlayer(index) {
+        const videosContainer = document.getElementById('videos-container');
+        const videoPlayer = document.getElementById('video-player');
+
+        // Display the video container
+        videosContainer.style.display = 'block';
+
+        // Clear any existing video iframe
+        videoPlayer.innerHTML = '';
+
+        // Create and append new iframe for the selected video
+        const iframe = document.createElement('iframe');
+        iframe.src = videoUrls[index];
+        iframe.title = `Cyclone Video ${index + 1}`;
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        iframe.frameBorder = "0";
+        videoPlayer.appendChild(iframe);
+    }
+</script>
+
+</body>
+</html>

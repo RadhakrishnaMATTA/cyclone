@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood Detection System - Wind Pressure</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Navigation and Header */
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #ffcc00;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(to right, rgba(0, 68, 204, 0.9), rgba(0, 153, 255, 0.9)), url('https://via.placeholder.com/1200x600') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .hero-content h2 {
+            font-size: 48px;
+        }
+
+        /* Wind Pressure Information Section */
+        .wind-info {
+            padding: 60px 20px;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+
+        .wind-info h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .wind-info p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .wind-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 30px;
+        }
+
+        .wind-graph {
+            width: 60%;
+            height: 300px;
+        }
+
+        .classification-info {
+            width: 35%;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .classification-info h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .classification-info p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        /* Input Section */
+        .input-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .input-section label {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            width: 150px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #003366;
+            color: white;
+            border: none;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Cyclone Detection System - Wind Pressure</h1>
+        <nav>
+            <ul>
+                <li><a href="index1.html">Home</a></li>
+                <li><a href="humidity.html">Humidity</a></li>
+                <li><a href="rainfall.html">Rainfall</a></li>
+                <li><a href="#">WindPressure</a></li>
+                <li><a href="waterlevel.html">Waterlevel</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Monitor Wind Pressure for Cyclone Risk</h2>
+            <p>Track wind pressure levels to assess the potential for Cyclone and damage during storms.</p>
+        </div>
+    </section>
+
+    <!-- Wind Pressure Information Section -->
+    <section class="wind-info">
+        <h2>Current Wind Pressure Levels</h2>
+        <p>Wind pressure is a critical factor in Cyclone prediction, particularly in storm surge and coastal Cyclone scenarios.</p>
+
+        <div class="wind-container">
+            <div class="wind-graph">
+                <canvas id="windPressureChart"></canvas>
+            </div>
+            <div class="classification-info">
+                <h3>Wind Pressure Classification</h3>
+                <p><strong>Low Pressure:</strong> 990-1010 hPa</p>
+                <p><strong>Normal Pressure:</strong> 1010-1025 hPa</p>
+                <p><strong>High Pressure:</strong> 1025-1040 hPa</p>
+                <p><strong>Very High Pressure:</strong> 1040+ hPa</p>
+                <p><strong>Current pressure (1015 hPa):</strong> Normal Pressure</p>
+            </div>
+        </div>
+
+        <p>Our system monitors wind pressure continuously to provide early warnings for storm-related Cyclone events.</p>
+    </section>
+
+    <!-- Input Section for User Input -->
+    <section class="input-section">
+        <label for="windPressureInput">Enter Wind Pressure Level (hPa):</label>
+        <input type="number" id="windPressureInput" min="0" placeholder="Enter wind pressure" />
+        <button onclick="checkWindPressure()">Check</button>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Cyclone Detection System. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('windPressureChart').getContext('2d');
+        const data = {
+            labels: [],
+            datasets: [{
+                label: 'Wind Pressure (hPa)',
+                data: [],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.raw + ' hPa';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom',
+                        ticks: {
+                            maxTicksLimit: 5
+                        },
+                        title: {
+                            display: true,
+                            text: 'Time',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    y: {
+                        min: 990,
+                        max: 1050,
+                        ticks: {
+                            stepSize: 10
+                        },
+                        title: {
+                            display: true,
+                            text: 'Wind Pressure (hPa)',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const windPressureChart = new Chart(ctx, config);
+
+        function updateWindPressureData() {
+            const timeNow = new Date().getTime();
+            const windPressureLevel = Math.random() * (1050 - 990) + 990;
+
+            if (data.labels.length >= 20) {
+                data.labels.shift();
+                data.datasets[0].data.shift();
+            }
+
+            data.labels.push(timeNow);
+            data.datasets[0].data.push(windPressureLevel);
+
+            windPressureChart.update();
+        }
+
+        setInterval(updateWindPressureData, 2000);
+
+        function checkWindPressure() {
+            const windPressure = parseFloat(document.getElementById('windPressureInput').value);
+
+            if (windPressure >= 1040) {
+                alert('Very High Pressure detected! Storm and Cyclone risk.');
+            } else if (windPressure >= 1025) {
+                alert('High Pressure detected! Potential for storm-related Cyclone.');
+            } else if (windPressure >= 1010) {
+                alert('Normal Pressure detected. No immediate Cyclone risk.');
+            } else if (windPressure >= 990) {
+                alert('Low Pressure detected. No Cyclone risk.');
+            } else {
+                alert('Invalid pressure input.');
+            }
+        }
+    </script>
+
+</body>
+</html>

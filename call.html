@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page - Flood Detection</title>
+    <style>
+        body {
+             
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://images.pexels.com/photos/70573/fireman-firefighter-rubble-9-11-70573.jpeg?cs=srgb&dl=pexels-pixabay-70573.jpg&fm=jpg'); /* Replace with your image path or URL */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        header {
+            background: #0044cf;
+            color: white;
+            text-align: center;
+            padding: 20px 10px;
+        }
+        .button-container {
+            text-align: center;
+            margin: 20px;
+        }
+        .emergency-contacts {
+            display: none;
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .emergency-contacts li {
+            background-color: #0044dc;
+            color: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .emergency-contacts li a {
+            color: white;
+            text-decoration: none;
+        }
+        .emergency-contacts li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Flood Detection and Safety Information</h1>
+        <p>Learn about floods and cyclones, and access emergency contacts for safety.</p>
+    </header>
+
+    <div class="content">
+        <!-- Button to show emergency contacts -->
+        <div class="button-container">
+            <button onclick="toggleEmergencyContacts()">Show Emergency Contacts</button>
+        </div>
+
+        <!-- Emergency Contacts List (Initially hidden) -->
+        <ul id="emergencyContacts" class="emergency-contacts">
+            <li><a href="tel:+1122334455">Rescue Team: +1-122-334-455</a></li>
+            <li><a href="tel:+1100233445">Local Hospital: +1-100-233-445</a></li>
+            <li><a href="tel:+1011122334">Fire Department: +1-101-112-2334</a></li>
+        </ul>
+    </div>
+
+    <script>
+        // Function to toggle the visibility of the emergency contacts
+        function toggleEmergencyContacts() {
+            var contactList = document.getElementById('emergencyContacts');
+            if (contactList.style.display === "none" || contactList.style.display === "") {
+                contactList.style.display = "block";
+            } else {
+                contactList.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>

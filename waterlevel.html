@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood,Cyclone Water Level Monitoring</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Same styling as before */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .input-section {
+            margin: 20px;
+            text-align: center;
+        }
+        input[type="number"] {
+            padding: 10px;
+            width: 150px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #003366;
+            color: white;
+            border: none;
+            margin-left: 10px;
+        }
+        button:hover {
+            background-color: #ffcc00;
+        }
+        .water-level-info {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .history-section {
+            margin-top: 30px;
+            text-align: left;
+            width: 45%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .history-section table {
+            width: 100%;
+            margin: auto;
+            border-collapse: collapse;
+        }
+        .history-section table, th, td {
+            border: 1px solid #ddd;
+        }
+        .history-section th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        .history-section th {
+            background-color: #f2f2f2;
+        }
+        /* Layout adjustment for the graph and history */
+        .main-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            margin-top: 30px;
+        }
+        .chart-container {
+            width: 55%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Flood,Cyclone Water Level Monitoring System</h1>
+    </header>
+
+    <!-- Input Section -->
+    <div class="input-section">
+        <label for="waterLevelInput">Enter Current Water Level (cm):</label>
+        <input type="number" id="waterLevelInput" min="0" placeholder="Enter water level" />
+        <button onclick="checkWaterLevel()">Check Water Level</button>
+        <button onclick="resetWaterLevel()">Reset</button>
+    </div>
+
+    <!-- Water Level Info Section -->
+    <div class="water-level-info" id="waterLevelInfo">
+        <p>Current Water Level: <span id="currentWaterLevel">0</span> cm</p>
+        <p>Status: <span id="status">Normal</span></p>
+        <p>Water Level Information: <span id="levelInfo">The water level is safe and normal.</span></p>
+    </div>
+
+    <!-- Main Container: Chart and History -->
+    <div class="main-container">
+        <!-- Chart.js for Water Level Gauge -->
+        <div class="chart-container">
+            <canvas id="waterLevelChart"></canvas>
+        </div>
+
+        <!-- History Section -->
+        <div class="history-section" id="historySection">
+            <h3>Water Level History</h3>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Water Level (cm)</th>
+                    <th>Status</th>
+                </tr>
+                <!-- History rows will be populated here -->
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Flood Detection System. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize Chart.js
+        const ctx = document.getElementById('waterLevelChart').getContext('2d');
+        const data = {
+            labels: ['Water Level'],
+            datasets: [{
+                label: 'Water Level (cm)',
+                data: [0], // Initial value
+                backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                borderColor: 'rgba(0, 123, 255, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 200, // Adjust according to your flood level thresholds
+                        ticks: {
+                            stepSize: 20
+                        }
+                    }
+                },
+                responsive: true
+            }
+        };
+
+        const waterLevelChart = new Chart(ctx, config);
+
+        // Water level history array
+        let history = [];
+
+        function checkWaterLevel() {
+            const waterLevel = parseFloat(document.getElementById('waterLevelInput').value);
+            const currentWaterLevelText = document.getElementById('currentWaterLevel');
+            const statusText = document.getElementById('status');
+            const levelInfoText = document.getElementById('levelInfo');
+            const historySection = document.getElementById('historySection').querySelector("table");
+
+            // Update chart data
+            data.datasets[0].data = [waterLevel];
+            waterLevelChart.update();
+
+            // Update current water level and status
+            currentWaterLevelText.textContent = waterLevel;
+
+            // Determine flood risk and provide information
+            let status, levelInfo;
+            if (waterLevel > 150) {
+                status = 'Flood Risk High!';
+                statusText.style.color = 'red';
+                levelInfo = 'The water level is dangerously high and may cause flooding.';
+                sendEmailAlert(waterLevel);  // Call to send email alert for high water level
+            } else if (waterLevel > 100) {
+                status = 'Flood Risk Moderate';
+                statusText.style.color = 'orange';
+                levelInfo = 'The water level is high, and flooding is possible.';
+            } else {
+                status = 'Normal Water Level';
+                statusText.style.color = 'green';
+                levelInfo = 'The water level is safe and normal.';
+            }
+
+            statusText.textContent = status;
+            levelInfoText.textContent = levelInfo;
+
+            // Store water level history
+            const currentTime = new Date().toLocaleString();
+            history.push({ time: currentTime, level: waterLevel, status: status });
+
+            // Update history table
+            updateHistoryTable();
+
+            // Reset the input field
+            document.getElementById('waterLevelInput').value = '';
+        }
+
+        function updateHistoryTable() {
+            const historySection = document.getElementById('historySection').querySelector("table");
+            // Clear the current table rows
+            historySection.innerHTML = `
+                <tr>
+                    <th>Time</th>
+                    <th>Water Level (cm)</th>
+                    <th>Status</th>
+                </tr>
+            `;
+
+            // Add new rows for history
+            history.forEach(entry => {
+                const row = historySection.insertRow();
+                const timeCell = row.insertCell(0);
+                const levelCell = row.insertCell(1);
+                const statusCell = row.insertCell(2);
+
+                timeCell.textContent = entry.time;
+                levelCell.textContent = entry.level;
+                statusCell.textContent = entry.status;
+            });
+        }
+
+        // Function to send email alert (simulated)
+        function sendEmailAlert(waterLevel) {
+            alert(`Email Sent: Water level is at ${waterLevel} cm, which is dangerously high!`);
+        }
+
+        // Reset Function
+        function resetWaterLevel() {
+            document.getElementById('waterLevelInput').value = '';
+            document.getElementById('currentWaterLevel').textContent = '0';
+            document.getElementById('status').textContent = 'Normal';
+            document.getElementById('levelInfo').textContent = 'The water level is safe and normal.';
+            history = [];
+            updateHistoryTable();
+        }
+
+        // Auto data logging (every 5 minutes)
+        setInterval(() => {
+            const waterLevel = Math.floor(Math.random() * 200); // Random water level for demo
+            checkWaterLevel(waterLevel);
+        }, 300000);  // Every 5 minutes
+
+    </script>
+
+</body>
+</html>

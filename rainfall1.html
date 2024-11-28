@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood,Cyclone System - Rainfall</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Navigation and Header */
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #ffcc00;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(to right, rgba(0, 68, 204, 0.9), rgba(0, 153, 255, 0.9)), url('https://via.placeholder.com/1200x600') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .hero-content h2 {
+            font-size: 48px;
+        }
+
+        /* Rainfall Information Section */
+        .rainfall-info {
+            padding: 60px 20px;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+
+        .rainfall-info h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .rainfall-info p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .rainfall-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 30px;
+        }
+
+        .rainfall-graph {
+            width: 60%;
+            height: 300px;
+        }
+
+        .classification-info {
+            width: 35%;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .classification-info h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .classification-info p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        /* Input Section */
+        .input-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .input-section label {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            width: 150px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #003366;
+            color: white;
+            border: none;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Flood,Cylone Detection System - Rainfall</h1>
+        <nav>
+            <ul>
+                <li><a href="index1.html">Home</a></li>
+                <li><a href="humidity.html">Humidity</a></li>
+                <li><a href="rainfall.html">Rainfall</a></li>
+                <li><a href="windpressure.html">Windpressure</a></li>
+                <li><a href="waterlevel.html">Waterlevl</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Monitor Rainfall for Flood,Cyclone Risk</h2>
+            <p>Track rainfall levels to assess flood risks. Stay ahead of potential flooding and cyclone events.</p>
+        </div>
+    </section>
+
+    <!-- Rainfall Information Section -->
+    <section class="rainfall-info">
+        <h2>Current Rainfall Levels</h2>
+        <p>Rainfall is a crucial factor in flood,Cyclone prediction. High rainfall levels can significantly increase the risk of flooding,Cyclone.</p>
+
+        <div class="rainfall-container">
+            <div class="rainfall-graph">
+                <canvas id="rainfallChart"></canvas>
+            </div>
+            <div class="classification-info">
+                <h3>General Rainfall Classification</h3>
+                <p><strong>Light Rainfall:</strong> 0-10 mm per hour</p>
+                <p><strong>Moderate Rainfall:</strong> 10-30 mm per hour</p>
+                <p><strong>Heavy Rainfall:</strong> 30-50 mm per hour</p>
+                <p><strong>Very Heavy Rainfall:</strong> 50-100 mm per hour</p>
+                <p><strong>Extremely Heavy Rainfall:</strong> 100+ mm per hour</p>
+                <p><strong>Current rainfall (55 mm):</strong> Very Heavy Rainfall</p>
+            </div>
+        </div>
+
+        <p>Our system continuously monitors rainfall levels in real-time to provide early alerts and flood,Cyclone predictions.</p>
+    </section>
+
+    <!-- Input Section for User Input -->
+    <section class="input-section">
+        <label for="rainfallInput">Enter Rainfall Level (mm):</label>
+        <input type="number" id="rainfallInput" min="0" placeholder="Enter rainfall" />
+        <button onclick="checkRainfall()">Check</button>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Flood Detection System. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('rainfallChart').getContext('2d');
+        const data = {
+            labels: [],
+            datasets: [{
+                label: 'Rainfall (mm)',
+                data: [],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.raw + ' mm';
+                            }
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 10,
+                        top: 10,
+                        bottom: 10
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom',
+                        ticks: {
+                            maxTicksLimit: 5
+                        },
+                        title: {
+                            display: true,
+                            text: 'Time',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    y: {
+                        min: 0,
+                        ticks: {
+                            stepSize: 10
+                        },
+                        title: {
+                            display: true,
+                            text: 'Rainfall (mm)',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const rainfallChart = new Chart(ctx, config);
+
+        function updateRainfallData() {
+            const timeNow = new Date().getTime();
+            const rainfallLevel = Math.random() * 100;
+
+            if (data.labels.length >= 20) {
+                data.labels.shift();
+                data.datasets[0].data.shift();
+            }
+
+            data.labels.push(timeNow);
+            data.datasets[0].data.push(rainfallLevel);
+
+            rainfallChart.update();
+        }
+
+        setInterval(updateRainfallData, 2000);
+
+        function checkRainfall() {
+            const rainfall = parseFloat(document.getElementById('rainfallInput').value);
+
+            if (rainfall >= 100) {
+                alert('Extremely Heavy rainfall detected! Risk of flooding.');
+            } else if (rainfall >= 50) {
+                alert('Very Heavy rainfall detected! Watch out for potential flooding.');
+            } else if (rainfall >= 30) {
+                alert('Heavy rainfall detected! Be cautious.');
+            } else if (rainfall >= 10) {
+                alert('Moderate rainfall detected. No immediate flood risk.');
+            } else {
+                alert('Light rainfall detected. No flood risk.');
+            }
+        }
+    </script>
+
+</body>
+</html>

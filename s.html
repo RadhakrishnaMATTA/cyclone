@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood Risk Interactive Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Header Section */
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        /* Map Section */
+        .map-section {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .map-section h2 {
+            font-size: 32px;
+            color: #003366;
+            margin-bottom: 10px;
+        }
+
+        .map-section p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        /* Map Container */
+        #map {
+            width: 90%;
+            height: 500px;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>Flood Detection System - Interactive Map</h1>
+    </header>
+
+    <!-- Map Section -->
+    <section id="map-section" class="map-section">
+        <h2>Flood Risk Interactive Map</h2>
+        <p>Explore flood-prone areas and high-risk zones in real-time.</p>
+        <!-- Map Container -->
+        <div id="map"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Flood Detection System. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Leaflet Script -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Create a map centered globally
+        const map = L.map('map').setView([20, 0], 2);
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Flood-prone locations with high-risk countries marked in red
+        const locations = [
+            { lat: 23.6345, lon: -102.5528, name: "Mexico", color: "red" },
+            { lat: 30.3753, lon: 69.3451, name: "Pakistan", color: "red" },
+            { lat: -0.7893, lon: 113.9213, name: "Indonesia", color: "blue" },
+            { lat: 15.8700, lon: 100.9925, name: "Thailand", color: "blue" },
+            { lat: 35.8617, lon: 104.1954, name: "China", color: "blue" },
+            { lat: 28.3949, lon: 84.1240, name: "Nepal", color: "red" },
+            { lat: 8.7832, lon: -55.4915, name: "Brazil", color: "blue" },
+            { lat: 18.7357, lon: -70.1627, name: "Dominican Republic", color: "blue" },
+            { lat: 9.081999, lon: 8.675277, name: "Nigeria", color: "red" },
+            { lat: 14.4974, lon: -14.4524, name: "Senegal", color: "blue" }
+        ];
+
+        // Add markers to the map
+        locations.forEach(location => {
+            const markerColor = location.color === "red" ? 'red' : 'blue';
+            L.circleMarker([location.lat, location.lon], {
+                color: markerColor,
+                radius: 10,
+                fillOpacity: 0.8
+            })
+            .addTo(map)
+            .bindPopup(`<h4>${location.name}</h4><p>${location.color === "red" ? "Red Alert: Extreme flood risk." : "High risk of flooding in specific areas."}</p>`);
+        });
+    </script>
+</body>
+</html>
